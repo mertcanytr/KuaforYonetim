@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34511.84
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KuaforYonetim1", "KuaforYonetim1.csproj", "{AF002EBD-3C80-4DE4-8693-0AC24D530D94}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AF002EBD-3C80-4DE4-8693-0AC24D530D94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF002EBD-3C80-4DE4-8693-0AC24D530D94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF002EBD-3C80-4DE4-8693-0AC24D530D94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF002EBD-3C80-4DE4-8693-0AC24D530D94}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {560D1DC7-9873-4777-87A6-05B9875AC098}
+	EndGlobalSection
+EndGlobal
