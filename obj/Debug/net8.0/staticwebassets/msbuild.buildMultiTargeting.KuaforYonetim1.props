@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\KuaforYonetim1.props" />
+</Project>
