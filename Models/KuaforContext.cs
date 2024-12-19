@@ -4,9 +4,13 @@ namespace KuaforYonetim1.Models
 {
     public class KuaforContext : DbContext
     {
-        public DbSet<Personeldene> Personeller { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Service> Services { get; set; }
+        public DbSet<Staff> Staff { get; set; } // Correct DbSet for Staff
 
-        public KuaforContext(DbContextOptions options) : base(options)
+        // Constructor to pass DbContext options
+        public KuaforContext(DbContextOptions<KuaforContext> options) : base(options)
         {
 
         }
