@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "Login Page";
+}
+
+<h2>Login Page</h2>
+
+<div>
+    <h3>Select Your Role</h3>
+    <form method="get" action="@Url.Action("AdminLogin", "Home")">
+        <button type="submit">Admin Login</button>
+    </form>
+
+    <form method="get" action="@Url.Action("UserLogin", "Home")">
+        <button type="submit">User Login</button>
+    </form>
+</div>
