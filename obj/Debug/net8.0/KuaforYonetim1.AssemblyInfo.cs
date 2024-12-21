@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KuaforYonetim1")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3f85bc9c70e00a1a2b0aa0f5cd94fcb6e2b7c49c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e3ef220f733999939c765c9a910c687e0e291f9e")]
 [assembly: System.Reflection.AssemblyProductAttribute("KuaforYonetim1")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KuaforYonetim1")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

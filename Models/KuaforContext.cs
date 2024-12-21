@@ -8,7 +8,7 @@ namespace KuaforYonetim1.Models
         public KuaforContext(DbContextOptions<KuaforContext> options)
             : base(options)
         {
-            Options = options;
+            private DbContextOptions Options = options;
         }
 
         public DbSet<Customer> Customers { get; set; }
@@ -17,7 +17,7 @@ namespace KuaforYonetim1.Models
         public DbSet<Staff> Staffs { get; set; }
     }
 
-    public class IdentityDbContext<T>
+    public class IdentityDbContext<DbContext>
     {
         private DbContextOptions<KuaforContext> options;
 

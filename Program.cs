@@ -9,7 +9,7 @@ builder.Services.AddControllersWithViews();
 
 // Database context configuration
 builder.Services.AddDbContext<KuaforContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection.")));
 
 // Identity services configuration
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
