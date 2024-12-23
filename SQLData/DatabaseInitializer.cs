@@ -14,7 +14,7 @@ namespace KuaforYonetim1.Data
             }
 
             // Admin kullanıcısını oluştur
-            var adminEmail = "OgrenciNumarasi@sakarya.edu.tr";
+            var adminEmail = "b211210092@sakarya.edu.tr";
             var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
             if (adminUser == null)

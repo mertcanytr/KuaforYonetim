@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 
 namespace KuaforYonetim1.Controllers
 {
@@ -51,7 +53,17 @@ namespace KuaforYonetim1.Controllers
                             return RedirectToAction("Index", "Home");
                         }
                     }
+
+                    // Claims oluşturma ve kullanıcıyı oturum açma
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, user.Id),
+                        new Claim("NameSurname", user.UserName ?? "User")
+                    };
+                    var claimsIdentity = new ClaimsIdentity(claims, "Custom");
+                    await HttpContext.SignInAsync(new ClaimsPrincipal(claimsIdentity));
                 }
+
                 ModelState.AddModelError(string.Empty, "Geçersiz giriş denemesi.");
             }
             return View(model);
