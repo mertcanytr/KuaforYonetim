@@ -7,12 +7,7 @@ namespace KuaforYonetim1.Models
 {
 
 
-    public enum AppointmentSituation
-    {
-        Waiting,
-        Approved,
-        Rejected
-    }
+    
 
     // Models/Appointment.cs
     public class Appointment
@@ -35,8 +30,7 @@ namespace KuaforYonetim1.Models
         public User user { get; set; }
 
 
-        public AppointmentSituation Situation { get; set; } = AppointmentSituation.Waiting;
-
+        public AppointmentStatus Status { get; set; } = AppointmentStatus.Pending;
         public static ValidationResult ValidateDate(DateTime AppointmentTime, ValidationContext context)
         {
             if (AppointmentTime < DateTime.Now)
