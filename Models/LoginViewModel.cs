@@ -1,18 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace KuaforYonetim1.Models
+namespace KuaforYonetim1.ViewModels
 {
     public class LoginViewModel
     {
-        [Required(ErrorMessage = "Email adresi gereklidir.")]
+        [Required]
         [EmailAddress]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Şifre gereklidir.")]
+        [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [Display(Name = "Beni Hatırla")]
+        [Display(Name = "Beni hatırla")]
         public bool RememberMe { get; set; }
     }
 }

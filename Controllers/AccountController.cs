@@ -1,19 +1,17 @@
 ﻿using KuaforYonetim1.Models;
+using KuaforYonetim1.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
 
 namespace KuaforYonetim1.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
 
-        public AccountController(UserManager<IdentityUser> userManager,
-                                 SignInManager<IdentityUser> signInManager)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -33,7 +31,6 @@ namespace KuaforYonetim1.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Kullanıcı adı olarak email veya username kullanılabilir
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 if (user != null)
                 {
@@ -42,26 +39,15 @@ namespace KuaforYonetim1.Controllers
 
                     if (result.Succeeded)
                     {
-                        // Kullanıcı admin ise admin paneline yönlendir
                         if (await _userManager.IsInRoleAsync(user, "Admin"))
                         {
                             return RedirectToAction("Index", "Admin");
                         }
                         else
                         {
-                            // Diğer kullanıcı yönlendirmesi
                             return RedirectToAction("Index", "Home");
                         }
                     }
-
-                    // Claims oluşturma ve kullanıcıyı oturum açma
-                    var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.NameIdentifier, user.Id),
-                        new Claim("NameSurname", user.UserName ?? "User")
-                    };
-                    var claimsIdentity = new ClaimsIdentity(claims, "Custom");
-                    await HttpContext.SignInAsync(new ClaimsPrincipal(claimsIdentity));
                 }
 
                 ModelState.AddModelError(string.Empty, "Geçersiz giriş denemesi.");

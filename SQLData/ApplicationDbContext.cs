@@ -12,8 +12,7 @@ namespace KuaforYonetim1.SQLData
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Service> Services { get; set; }
-        public DbSet<Staff> Staffs { get; set; }  // Staffs için DbSet tanımı
-
+        public DbSet<Staff> Staffs { get; set; }
         public DbSet<StaffService> StaffServices { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -33,8 +32,6 @@ namespace KuaforYonetim1.SQLData
                 .HasOne(ss => ss.Service)
                 .WithMany(s => s.StaffServices)
                 .HasForeignKey(ss => ss.ServiceId);
-
-
         }
     }
 }

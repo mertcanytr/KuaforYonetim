@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using KuaforYonetim1.Models;
+using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 
 namespace KuaforYonetim1.Data
 {
     public static class DatabaseInitializer
     {
-        public static async Task Seed(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public static async Task Seed(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             // Admin rolü oluştur
             if (!await roleManager.RoleExistsAsync("Admin"))
@@ -19,13 +20,13 @@ namespace KuaforYonetim1.Data
 
             if (adminUser == null)
             {
-                adminUser = new IdentityUser
+                adminUser = new User
                 {
                     UserName = adminEmail,
                     Email = adminEmail,
+                    NameSurname = "Admin Kullanıcı",
                     EmailConfirmed = true
                 };
-                // Şifre politikalarını esnetmek için seçenekleri yapılandırabiliriz
                 var result = await userManager.CreateAsync(adminUser, "sau"); // Şifre 'sau'
 
                 if (result.Succeeded)
