@@ -1,9 +1,10 @@
 ﻿using KuaforYonetim1.SQLData;
 using KuaforYonetim1.Models;
-using KuaforYonetim1.ViewModels; // Eğer ViewModel kullanıyorsanız
+using KuaforYonetim1.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace KuaforYonetim1.Controllers
 {
@@ -43,6 +44,7 @@ namespace KuaforYonetim1.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult AddStaff(AddStaffViewModel model)
         {
             if (ModelState.IsValid)

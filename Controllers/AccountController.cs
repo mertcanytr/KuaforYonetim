@@ -17,14 +17,12 @@ namespace KuaforYonetim1.Controllers
             _signInManager = signInManager;
         }
 
-        // GET: /Account/Login
         [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
 
-        // POST: /Account/Login
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
@@ -48,20 +46,19 @@ namespace KuaforYonetim1.Controllers
                             return RedirectToAction("Index", "Home");
                         }
                     }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Geçersiz şifre.");
+                    }
                 }
-
-                ModelState.AddModelError(string.Empty, "Geçersiz giriş denemesi.");
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Kullanıcı bulunamadı.");
+                }
             }
             return View(model);
         }
 
-        // GET: /Account/AccessDenied
-        public IActionResult AccessDenied()
-        {
-            return View();
-        }
-
-        // Çıkış Yap
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
