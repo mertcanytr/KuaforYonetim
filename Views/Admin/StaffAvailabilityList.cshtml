@@ -1,0 +1,30 @@
+﻿@model IEnumerable<KuaforYonetim1.Models.StaffAvailability>
+
+<h2>Çalışan Uygunluk Saatleri</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Gün</th>
+            <th>Başlangıç Saati</th>
+            <th>Bitiş Saati</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var availability in Model)
+        {
+                <tr>
+                    <td>@availability.DayOfWeek</td>
+                    <td>@availability.StartTime</td>
+                    <td>@availability.EndTime</td>
+                    <td>
+                        <a asp-action="EditStaffAvailability" asp-route-id="@availability.Id" class="btn btn-warning">Düzenle</a>
+                        <a asp-action="DeleteStaffAvailability" asp-route-id="@availability.Id" class="btn btn-danger">Sil</a>
+                    </td>
+                </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="AddStaffAvailability" asp-route-staffId="@ViewBag.StaffId" class="btn btn-primary">Yeni Uygunluk Ekle</a>

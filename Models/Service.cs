@@ -8,6 +8,8 @@
         public int Duration { get; set; } // Duration in minutes
         public decimal Price { get; set; }
 
+        public int SalonId { get; set; }
+        public Salon Salon { get; set; }
         public TimeSpan EstimatedDuration { get; set; }
 
 

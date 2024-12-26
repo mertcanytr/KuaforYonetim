@@ -1,10 +1,10 @@
-﻿using KuaforYonetim1.SQLData;
-using KuaforYonetim1.Models;
-using KuaforYonetim1.ViewModels;
+﻿using KuaforYonetim1.Models;
+using KuaforYonetim1.SQLData;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace KuaforYonetim1.Controllers
 {
@@ -18,120 +18,80 @@ namespace KuaforYonetim1.Controllers
             _dbContext = dbContext;
         }
 
-        public IActionResult Index()
+        // Çalışanların uygunluk saatlerini listeleme
+        public IActionResult StaffAvailabilityList(int staffId)
         {
-            return View();
-        }
-
-        public IActionResult StaffList()
-        {
-            var staffMembers = _dbContext.Staffs
-                .Include(s => s.StaffServices)
-                .ThenInclude(ss => ss.Service)
+            var availabilities = _dbContext.StaffAvailabilities
+                .Where(sa => sa.StaffId == staffId)
+                .Include(sa => sa.Staff)
                 .ToList();
 
-            return View(staffMembers);
+            ViewBag.StaffId = staffId;
+            return View(availabilities);
         }
 
+        // Uygunluk saati ekleme
         [HttpGet]
-        public IActionResult AddStaff()
+        public IActionResult AddStaffAvailability(int staffId)
         {
-            var model = new AddStaffViewModel
+            var model = new StaffAvailability
             {
-                AvailableServices = _dbContext.Services.ToList()
+                StaffId = staffId
             };
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddStaff(AddStaffViewModel model)
+        public IActionResult AddStaffAvailability(StaffAvailability model)
         {
             if (ModelState.IsValid)
             {
-                var staff = new Staff
-                {
-                    NameSurname = model.NameSurname
-                };
-
-                foreach (var serviceId in model.SelectedServices)
-                {
-                    var service = _dbContext.Services.Find(serviceId);
-                    if (service != null)
-                    {
-                        staff.StaffServices.Add(new StaffService
-                        {
-                            Staff = staff,
-                            Service = service
-                        });
-                    }
-                }
-
-                _dbContext.Staffs.Add(staff);
+                _dbContext.StaffAvailabilities.Add(model);
                 _dbContext.SaveChanges();
-                TempData["SuccessMessage"] = "Çalışan başarıyla eklendi.";
-                return RedirectToAction("StaffList");
+                TempData["SuccessMessage"] = "Uygunluk saati başarıyla eklendi.";
+                return RedirectToAction("StaffAvailabilityList", new { staffId = model.StaffId });
             }
-
-            model.AvailableServices = _dbContext.Services.ToList();
             return View(model);
         }
 
-        public IActionResult RemoveStaff(int id)
+        // Uygunluk saati düzenleme
+        [HttpGet]
+        public IActionResult EditStaffAvailability(int id)
         {
-            var staff = _dbContext.Staffs.Find(id);
-            if (staff != null)
+            var availability = _dbContext.StaffAvailabilities.Find(id);
+            if (availability == null)
             {
-                _dbContext.Staffs.Remove(staff);
-                _dbContext.SaveChanges();
-                TempData["SuccessMessage"] = "Çalışan başarıyla silindi.";
+                return NotFound();
             }
-            return RedirectToAction("StaffList");
+            return View(availability);
         }
 
-        public IActionResult AppointmentList()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditStaffAvailability(StaffAvailability model)
         {
-            var pendingAppointments = _dbContext.Appointments
-                .Include(a => a.Staff)
-                .Include(a => a.Service)
-                .Include(a => a.Customer)
-                .Where(a => a.Status == AppointmentStatus.Pending)
-                .ToList();
-
-            var confirmedAppointments = _dbContext.Appointments
-                .Include(a => a.Staff)
-                .Include(a => a.Service)
-                .Include(a => a.Customer)
-                .Where(a => a.Status == AppointmentStatus.Confirmed)
-                .ToList();
-
-            ViewBag.ConfirmedAppointments = confirmedAppointments;
-
-            return View(pendingAppointments);
+            if (ModelState.IsValid)
+            {
+                _dbContext.StaffAvailabilities.Update(model);
+                _dbContext.SaveChanges();
+                TempData["SuccessMessage"] = "Uygunluk saati başarıyla güncellendi.";
+                return RedirectToAction("StaffAvailabilityList", new { staffId = model.StaffId });
+            }
+            return View(model);
         }
 
-        public IActionResult ApproveAppointment(int id)
+        // Uygunluk saati silme
+        public IActionResult DeleteStaffAvailability(int id)
         {
-            var appointment = _dbContext.Appointments.Find(id);
-            if (appointment != null)
+            var availability = _dbContext.StaffAvailabilities.Find(id);
+            if (availability != null)
             {
-                appointment.Status = AppointmentStatus.Confirmed;
+                _dbContext.StaffAvailabilities.Remove(availability);
                 _dbContext.SaveChanges();
-                TempData["SuccessMessage"] = "Randevu başarıyla onaylandı.";
+                TempData["SuccessMessage"] = "Uygunluk saati başarıyla silindi.";
             }
-            return RedirectToAction("AppointmentList");
-        }
-
-        public IActionResult RejectAppointment(int id)
-        {
-            var appointment = _dbContext.Appointments.Find(id);
-            if (appointment != null)
-            {
-                appointment.Status = AppointmentStatus.Rejected;
-                _dbContext.SaveChanges();
-                TempData["SuccessMessage"] = "Randevu başarıyla reddedildi.";
-            }
-            return RedirectToAction("AppointmentList");
+            return RedirectToAction("StaffAvailabilityList", new { staffId = availability.StaffId });
         }
     }
 }

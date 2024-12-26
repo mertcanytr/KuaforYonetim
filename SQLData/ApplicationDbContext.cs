@@ -14,6 +14,9 @@ namespace KuaforYonetim1.SQLData
         public DbSet<Service> Services { get; set; }
         public DbSet<Staff> Staffs { get; set; }
         public DbSet<StaffService> StaffServices { get; set; }
+        public DbSet<StaffAvailability> StaffAvailabilities { get; set; }
+
+        public DbSet<Salon> Salons { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

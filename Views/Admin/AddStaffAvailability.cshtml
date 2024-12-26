@@ -1,0 +1,25 @@
+﻿@model KuaforYonetim1.Models.StaffAvailability
+
+<h2>Uygunluk Saati Ekle/Düzenle</h2>
+
+<form asp-action="@(Model.Id == 0 ? "AddStaffAvailability" : "EditStaffAvailability")" method="post">
+    <div class="form-group">
+        <label asp-for="DayOfWeek"></label>
+        <select asp-for="DayOfWeek" class="form-control">
+            @foreach (var day in Enum.GetValues(typeof(DayOfWeek)))
+            {
+                    <option value="@day">@day</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="StartTime"></label>
+        <input asp-for="StartTime" class="form-control" type="time" />
+    </div>
+    <div class="form-group">
+        <label asp-for="EndTime"></label>
+        <input asp-for="EndTime" class="form-control" type="time" />
+    </div>
+    <input type="hidden" asp-for="StaffId" />
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+</form>

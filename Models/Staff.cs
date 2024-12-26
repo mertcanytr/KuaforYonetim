@@ -12,5 +12,7 @@ namespace KuaforYonetim1.Models
         public string NameSurname { get; set; }
 
         public ICollection<StaffService> StaffServices { get; set; } = new List<StaffService>();
+
+        public ICollection<StaffAvailability> Availabilities { get; set; } = new List<StaffAvailability>();
     }
 }
