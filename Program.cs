@@ -1,6 +1,6 @@
 using KuaforYonetim1.Models;
 using KuaforYonetim1.SQLData;
-using KuaforYonetim1.Data; // DatabaseInitializer sýnýfýný ekleyin
+using KuaforYonetim1.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 

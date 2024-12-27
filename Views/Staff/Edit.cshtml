@@ -1,0 +1,13 @@
+﻿@model KuaforYonetim1.Models.Staff
+
+<h2>Çalışan Düzenle</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="StaffId" />
+    <div class="form-group">
+        <label asp-for="NameSurname" class="control-label"></label>
+        <input asp-for="NameSurname" class="form-control" />
+        <span asp-validation-for="NameSurname" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Güncelle</button>
+</form>

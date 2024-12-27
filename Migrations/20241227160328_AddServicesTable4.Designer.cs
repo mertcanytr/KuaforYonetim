@@ -4,6 +4,7 @@ using KuaforYonetim1.SQLData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KuaforYonetim1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241227160328_AddServicesTable4")]
+    partial class AddServicesTable4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -142,10 +144,11 @@ namespace KuaforYonetim1.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("SalonId")
+                    b.Property<int>("SalonId")
                         .HasColumnType("int");
 
                     b.Property<string>("ServiceName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ServiceId");
@@ -457,9 +460,13 @@ namespace KuaforYonetim1.Migrations
 
             modelBuilder.Entity("KuaforYonetim1.Models.Service", b =>
                 {
-                    b.HasOne("KuaforYonetim1.Models.Salon", null)
+                    b.HasOne("KuaforYonetim1.Models.Salon", "Salon")
                         .WithMany("Services")
-                        .HasForeignKey("SalonId");
+                        .HasForeignKey("SalonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Salon");
                 });
 
             modelBuilder.Entity("KuaforYonetim1.Models.Staff", b =>

@@ -13,6 +13,7 @@ namespace KuaforYonetim1.SQLData
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<Staff> Staffs { get; set; }
+        public DbSet<Day> Days { get; set; }
         public DbSet<StaffService> StaffServices { get; set; }
         public DbSet<StaffAvailability> StaffAvailabilities { get; set; }
 
