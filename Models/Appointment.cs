@@ -16,7 +16,9 @@ namespace KuaforYonetim1.Models
         public int StaffId { get; set; }
         public int ServiceId { get; set; }
         
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
+
+        [Required]
         public DateTime AppointmentTime { get; set; }
 
         [CustomValidation(typeof(Appointment),nameof(ValidateDate))]

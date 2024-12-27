@@ -15,7 +15,7 @@ namespace KuaforYonetim1.ViewModels
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Şifreyi Onayla")]
-        [Compare("Password", ErrorMessage = "Şifre ve onay şifresi eşleşmiyor.")]
+        [Compare("Password", ErrorMessage = "Şifreler eşleşmiyor.")]
         public string ConfirmPassword { get; set; }
 
         [Required]
