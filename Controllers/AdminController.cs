@@ -18,6 +18,19 @@ namespace KuaforYonetim1.Controllers
             _dbContext = dbContext;
         }
 
+        // Admin Paneli sayfasına yönlendiren bir action metodu
+        [HttpGet]
+        public IActionResult AdminPaneli()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
         // Çalışanların uygunluk saatlerini listeleme
         public IActionResult StaffAvailabilityList(int staffId)
         {
@@ -92,6 +105,13 @@ namespace KuaforYonetim1.Controllers
                 TempData["SuccessMessage"] = "Uygunluk saati başarıyla silindi.";
             }
             return RedirectToAction("StaffAvailabilityList", new { staffId = availability.StaffId });
+        }
+
+        // Logout action to clear session
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear(); // Clear session data
+            return RedirectToAction("Index", "Home");
         }
     }
 }

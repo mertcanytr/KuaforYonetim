@@ -1,12 +1,14 @@
 ﻿using KuaforYonetim1.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
+using System.Linq;
+using KuaforYonetim1.SQLData;
 
 namespace KuaforYonetim1.Data
 {
     public static class DatabaseInitializer
     {
-        public static async Task Seed(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public static async Task Seed(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext context)
         {
             // 1. Admin rolünü oluştur
             if (!await roleManager.RoleExistsAsync("Admin"))
@@ -76,6 +78,26 @@ namespace KuaforYonetim1.Data
                         Console.WriteLine(error.Description);
                     }
                 }
+            }
+
+            // Hizmetleri ekle
+            SeedServices(context);
+        }
+
+        private static void SeedServices(ApplicationDbContext context)
+        {
+            if (!context.Services.Any())
+            {
+                var services = new[]
+                {
+                    new Service { ServiceName = "Haircut", Duration = 30, Price = 20.00m },
+                    new Service { ServiceName = "Shave", Duration = 20, Price = 15.00m },
+                    new Service { ServiceName = "Beard Grooming", Duration = 25, Price = 18.00m },
+                    new Service { ServiceName = "Hair + Beard", Duration = 50, Price = 35.00m }
+                };
+
+                context.Services.AddRange(services);
+                context.SaveChanges();
             }
         }
     }

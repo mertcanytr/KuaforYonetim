@@ -1,0 +1,178 @@
+﻿@model KuaforYonetim1.Models.Appointment
+
+@if (TempData["message"] != null)
+{
+        <div class="temp-message">
+            <p>@TempData["message"]</p>
+        </div>
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head class="head">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/appointment.css" asp-append-version="true" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body class="appointment">
+    <img src="~/web/images/bookingPage.png" />
+    <form id="appointmentForm" asp-action="ConfirmAppointment" method="post" class="mb-4">
+        @Html.AntiForgeryToken()
+        <h2>Appointment System</h2>
+
+        <!-- Service Selection -->
+        <div class="mb-3">
+            <label for="service" class="form-label">Select Service:</label>
+            <select id="service" name="serviceId" class="form-select" onchange="loadStaff()" required>
+                <option value="">Select a Service</option>
+                @if (ViewData["Services"] != null)
+                {
+                    foreach (var service in (List<KuaforYonetim1.Models.Service>)ViewData["Services"])
+                    {
+                        <option value="@service.ServiceId">@service.ServiceName</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <!-- Staff Selection -->
+        <div class="mb-3">
+            <label for="staff" class="form-label">Select Staff:</label>
+            <select id="staff" name="staffId" class="form-select" disabled onchange="loadAvailableDays()" required>
+                <option value="">Select a Service First</option>
+            </select>
+        </div>
+
+        <!-- Date Selection -->
+        <div class="mb-3">
+            <label for="date" class="form-label">Select Appointment Date:</label>
+            <input type="date" id="date" name="appointmentDate" class="form-control" required
+                   min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+        </div>
+
+        <!-- Time Selection -->
+        <div class="mb-3">
+            <label for="time" class="form-label">Select Appointment Time:</label>
+            <select id="time" name="appointmentTime" class="form-select" required>
+                <option value="">Select a Time</option>
+                <!-- Times will be dynamically loaded here -->
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Book Appointment</button>
+    </form>
+
+    <script>
+        document.getElementById("appointmentForm").addEventListener("submit", function (event) {
+            const time = document.getElementById("time").value;
+            const date = document.getElementById("date").value;
+
+            if (!date || !time) {
+                alert("Please select a valid date and time.");
+                event.preventDefault();
+            }
+        });
+
+        async function loadStaff() {
+            const serviceId = document.getElementById("service").value;
+            const staffDropdown = document.getElementById("staff");
+
+            if (!serviceId) {
+                staffDropdown.innerHTML = '<option value="">Select a Service</option>';
+                staffDropdown.disabled = true;
+                return;
+            }
+
+            try {
+                const response = await fetch(`/Appointment/GetStaff?serviceId=${serviceId}`);
+                const staffList = await response.json();
+
+                if (response.ok && staffList.length) {
+                    staffDropdown.innerHTML = '<option value="">Select Staff</option>';
+                    staffList.forEach(staff => {
+                        staffDropdown.innerHTML += `<option value="${staff.staffId}">${staff.nameSurname}</option>`;
+                    });
+                    staffDropdown.disabled = false;
+                } else {
+                    alert("Failed to load staff. Please try again.");
+                }
+            } catch (error) {
+                console.error("An error occurred while fetching staff:", error);
+            }
+        }
+
+        async function loadAvailableDays() {
+            const staffId = document.getElementById("staff").value;
+            const dateInput = document.getElementById("date");
+
+            if (!staffId) return;
+
+            try {
+                const response = await fetch(`/Appointment/GetAvailableDays?staffId=${staffId}`);
+                const availableDays = await response.json();
+
+                if (response.ok && availableDays.length) {
+                    dateInput.disabled = false;
+                    dateInput.addEventListener('input', function() {
+                        const selectedDate = new Date(dateInput.value);
+                        const selectedDay = selectedDate.getDay();
+
+                        if (!availableDays.includes(selectedDay)) {
+                            alert("The selected day is not available for this staff.");
+                            dateInput.value = '';
+                        }
+                    });
+                } else {
+                    alert("Failed to load available days.");
+                }
+            } catch (error) {
+                console.error("An error occurred while fetching available days:", error);
+            }
+        }
+
+        async function loadAvailableTimes() {
+            const staffId = document.getElementById("staff").value;
+            const date = document.getElementById("date").value;
+            const serviceId = document.getElementById("service").value;
+            const timeDropdown = document.getElementById("time");
+
+            if (!staffId || !date || !serviceId) {
+                timeDropdown.innerHTML = '<option value="">Select a Time</option>';
+                timeDropdown.disabled = true;
+                return;
+            }
+
+            try {
+                const response = await fetch(`/Appointment/GetAvailableTimes?staffId=${staffId}&date=${date}&serviceId=${serviceId}`);
+                const times = await response.json();
+
+                if (response.ok && times.length) {
+                    timeDropdown.innerHTML = '<option value="">Select a Time</option>';
+                    times.forEach(time => {
+                        timeDropdown.innerHTML += `<option value="${time}">${time}</option>`;
+                    });
+                    timeDropdown.disabled = false;
+                } else {
+                    timeDropdown.innerHTML = '<option value="">No available times found</option>';
+                    timeDropdown.disabled = true;
+                }
+            } catch (error) {
+                console.error("An error occurred while fetching times:", error);
+                alert("An error occurred while fetching times.");
+            }
+        }
+
+        document.getElementById("date").addEventListener("change", loadAvailableTimes);
+        document.getElementById("service").addEventListener("change", loadAvailableTimes);
+    </script>
+
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
+</body>
+</html>

@@ -54,6 +54,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cU3RhZmZBdmFpbGFiaWxpdHlMaXN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/mertc/OneDrive/Masaüstü/main/Ödevler/KuaforYonetim1/Views/Appointment/AppointmentBooking.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXBwb2ludG1lbnRcQXBwb2ludG1lbnRCb29raW5nLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/mertc/OneDrive/Masaüstü/main/Ödevler/KuaforYonetim1/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -64,10 +68,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/mertc/OneDrive/Masaüstü/main/Ödevler/KuaforYonetim1/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/mertc/OneDrive/Masaüstü/main/Ödevler/KuaforYonetim1/Views/Home/UserLogin.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxVc2VyTG9naW4uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/mertc/OneDrive/Masaüstü/main/Ödevler/KuaforYonetim1/Views/Shared/Error.cshtml]

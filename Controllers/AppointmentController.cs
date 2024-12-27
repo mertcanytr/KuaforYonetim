@@ -1,85 +1,104 @@
 ﻿using KuaforYonetim1.Models;
 using KuaforYonetim1.SQLData;
-using KuaforYonetim1.ViewModels;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-[Authorize(Roles = "User")]
-public class AppointmentController : Controller
+namespace KuaforYonetim1.Controllers
 {
-    private readonly ApplicationDbContext _dbContext;
-    private readonly UserManager<User> _userManager;
-
-    public AppointmentController(ApplicationDbContext dbContext, UserManager<User> userManager)
+    public class AppointmentController : Controller
     {
-        _dbContext = dbContext;
-        _userManager = userManager;
-    }
+        private readonly ApplicationDbContext _dbContext;
 
-    [HttpGet]
-    public IActionResult Create()
-    {
-        // Hizmet ve çalışan listelerini alıp View'a gönderin
-        var services = _dbContext.Services.ToList();
-        var staffs = _dbContext.Staffs.ToList();
-        var model = new AppointmentViewModel
+        public AppointmentController(ApplicationDbContext dbContext)
         {
-            Services = services,
-            Staffs = staffs
-        };
-        return View(model);
-    }
+            _dbContext = dbContext;
+        }
 
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    //public async Task<IActionResult> Create(AppointmentViewModel model)
-    //{
-    //    if (ModelState.IsValid)
-    //    {
-    //        // Müsaitlik kontrolü yapın
-    //        var isAvailable = true; // Müsaitlik kontrolünü burada yapın
+        
 
-    //        if (isAvailable)
-    //        {
-    //            var userId = _userManager.GetUserId(User);
-    //            var appointment = new Appointment
-    //            {
-    //                CustomerId = /* Kullanıcıdan veya modelden alın */ ,
-    //                StaffId = model.StaffId,
-    //                ServiceId = model.ServiceId,
-    //                AppointmentTime = model.AppointmentTime,
-    //                UserId = userId,
-    //                Status = AppointmentStatus.Pending
-    //            };
+        [HttpGet]
+        public IActionResult Create()
+        {
+            var services = _dbContext.Services.ToList();
+            ViewData["Services"] = services;
+            return View("AppointmentBooking");
+        }
 
-    //            _dbContext.Appointments.Add(appointment);
-    //            await _dbContext.SaveChangesAsync();
-    //            TempData["SuccessMessage"] = "Randevu talebiniz oluşturuldu.";
-    //            return RedirectToAction("MyAppointments");
-    //        }
-    //        else
-    //        {
-    //            ModelState.AddModelError(string.Empty, "Seçilen saatlerde çalışan müsait değil.");
-    //        }
-    //    }
-    //    // Hizmet ve çalışan listelerini tekrar alıp View'a gönderin
-    //    model.Services = _dbContext.Services.ToList();
-    //    model.Staffs = _dbContext.Staffs.ToList();
-    //    return View(model);
-    //}
+        [HttpGet]
+        public async Task<IActionResult> GetStaff(int serviceId)
+        {
+            var staffList = await _dbContext.StaffServices
+                .Where(ss => ss.ServiceId == serviceId)
+                .Select(ss => ss.Staff)
+                .ToListAsync();
 
-    public IActionResult MyAppointments()
-    {
-        var userId = _userManager.GetUserId(User);
-        var appointments = _dbContext.Appointments
-            .Include(a => a.Staff)
-            .Include(a => a.Service)
-            .Where(a => a.UserId == userId)
-            .ToList();
-        return View(appointments);
+            return Json(staffList);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAvailableDays(int staffId)
+        {
+            var availableDays = await _dbContext.StaffAvailabilities
+                .Where(sa => sa.StaffId == staffId)
+                .Select(sa => sa.DayOfWeek)
+                .ToListAsync();
+
+            return Json(availableDays);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAvailableTimes(int staffId, string date, int serviceId)
+        {
+            var selectedDate = DateTime.Parse(date);
+            var appointments = await _dbContext.Appointments
+                .Where(a => a.StaffId == staffId && a.AppointmentTime.Date == selectedDate.Date)
+                .Select(a => a.AppointmentTime.TimeOfDay)
+                .ToListAsync();
+
+            var availability = await _dbContext.StaffAvailabilities
+                .FirstOrDefaultAsync(sa => sa.StaffId == staffId && sa.DayOfWeek == selectedDate.DayOfWeek);
+
+            if (availability == null)
+            {
+                return Json(new List<string>());
+            }
+
+            var availableTimes = new List<string>();
+            var startTime = availability.StartTime;
+            var endTime = availability.EndTime;
+
+            while (startTime < endTime)
+            {
+                if (!appointments.Contains(startTime))
+                {
+                    availableTimes.Add(startTime.ToString(@"hh\:mm"));
+                }
+                startTime = startTime.Add(TimeSpan.FromMinutes(10));
+            }
+
+            return Json(availableTimes);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConfirmAppointment(Appointment appointment)
+        {
+            if (ModelState.IsValid)
+            {
+                appointment.Status = AppointmentStatus.Pending;
+                _dbContext.Appointments.Add(appointment);
+                await _dbContext.SaveChangesAsync();
+                TempData["message"] = "Your appointment has been booked and is pending approval.";
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewData["Services"] = _dbContext.Services.ToList();
+            return View("AppointmentBooking", appointment);
+        }
+
+
     }
 }
