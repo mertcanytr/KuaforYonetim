@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace KuaforYonetim1.Controllers
 {
-
     [Authorize(Roles = "Admin")]
     public class StaffController : Controller
     {

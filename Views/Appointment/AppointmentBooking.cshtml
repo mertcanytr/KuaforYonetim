@@ -18,7 +18,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body class="appointment">
-    <img src="~/web/images/bookingPage.png" />
     <form id="appointmentForm" asp-action="ConfirmAppointment" method="post" class="mb-4">
         @Html.AntiForgeryToken()
         <h2>Appointment System</h2>
@@ -26,13 +25,13 @@
         <!-- Service Selection -->
         <div class="mb-3">
             <label for="service" class="form-label">Select Service:</label>
-            <select id="service" name="serviceId" class="form-select" onchange="loadStaff()" required>
+            <select id="service" name="serviceId" class="form-select" required>
                 <option value="">Select a Service</option>
                 @if (ViewData["Services"] != null)
                 {
                     foreach (var service in (List<KuaforYonetim1.Models.Service>)ViewData["Services"])
                     {
-                        <option value="@service.ServiceId">@service.ServiceName</option>
+                                <option value="@service.ServiceId">@service.ServiceName</option>
                     }
                 }
             </select>
@@ -41,8 +40,15 @@
         <!-- Staff Selection -->
         <div class="mb-3">
             <label for="staff" class="form-label">Select Staff:</label>
-            <select id="staff" name="staffId" class="form-select" disabled onchange="loadAvailableDays()" required>
-                <option value="">Select a Service First</option>
+            <select id="staff" name="staffId" class="form-select" required>
+                <option value="">Select a Staff</option>
+                @if (ViewData["Staffs"] != null)
+                {
+                    foreach (var staff in (List<KuaforYonetim1.Models.Staff>)ViewData["Staffs"])
+                    {
+                                <option value="@staff.StaffId">@staff.NameSurname</option>
+                    }
+                }
             </select>
         </div>
 
@@ -76,26 +82,17 @@
             }
         });
 
-        async function loadStaff() {
-            const serviceId = document.getElementById("service").value;
-            const staffDropdown = document.getElementById("staff");
-
-            if (!serviceId) {
-                staffDropdown.innerHTML = '<option value="">Select a Service</option>';
-                staffDropdown.disabled = true;
-                return;
-            }
-
+        async function loadAllStaff() {
             try {
-                const response = await fetch(`/Appointment/GetStaff?serviceId=${serviceId}`);
+                const response = await fetch('/Appointment/GetAllStaff');
                 const staffList = await response.json();
 
                 if (response.ok && staffList.length) {
-                    staffDropdown.innerHTML = '<option value="">Select Staff</option>';
+                    const staffDropdown = document.getElementById("staff");
+                    staffDropdown.innerHTML = '<option value="">Select a Staff</option>';
                     staffList.forEach(staff => {
                         staffDropdown.innerHTML += `<option value="${staff.staffId}">${staff.nameSurname}</option>`;
                     });
-                    staffDropdown.disabled = false;
                 } else {
                     alert("Failed to load staff. Please try again.");
                 }
@@ -104,34 +101,8 @@
             }
         }
 
-        async function loadAvailableDays() {
-            const staffId = document.getElementById("staff").value;
-            const dateInput = document.getElementById("date");
-
-            if (!staffId) return;
-
-            try {
-                const response = await fetch(`/Appointment/GetAvailableDays?staffId=${staffId}`);
-                const availableDays = await response.json();
-
-                if (response.ok && availableDays.length) {
-                    dateInput.disabled = false;
-                    dateInput.addEventListener('input', function() {
-                        const selectedDate = new Date(dateInput.value);
-                        const selectedDay = selectedDate.getDay();
-
-                        if (!availableDays.includes(selectedDay)) {
-                            alert("The selected day is not available for this staff.");
-                            dateInput.value = '';
-                        }
-                    });
-                } else {
-                    alert("Failed to load available days.");
-                }
-            } catch (error) {
-                console.error("An error occurred while fetching available days:", error);
-            }
-        }
+        // Load staff list when the page loads
+        document.addEventListener("DOMContentLoaded", loadAllStaff);
 
         async function loadAvailableTimes() {
             const staffId = document.getElementById("staff").value;
@@ -165,36 +136,9 @@
             }
         }
 
-        async function loadStaff() {
-             const serviceId = document.getElementById("service").value;
-             const staffDropdown = document.getElementById("staff");
-
-             if (!serviceId) {
-                 staffDropdown.innerHTML = '<option value="">Select a Service</option>';
-                 staffDropdown.disabled = true;
-                 return;
-             }
-
-             try {
-                 const response = await fetch(`/Appointment/GetStaff?serviceId=${serviceId}`);
-                 const staffList = await response.json();
-
-                 if (response.ok && staffList.length) {
-                     staffDropdown.innerHTML = '<option value="">Select Staff</option>';
-                     staffList.forEach(staff => {
-                         staffDropdown.innerHTML += `<option value="${staff.staffId}">${staff.nameSurname}</option>`;
-                     });
-                     staffDropdown.disabled = false;
-                 } else {
-                     alert("Failed to load staff. Please try again.");
-                 }
-             } catch (error) {
-                 console.error("An error occurred while fetching staff:", error);
-             }
-        }
-
         document.getElementById("date").addEventListener("change", loadAvailableTimes);
         document.getElementById("service").addEventListener("change", loadAvailableTimes);
+        document.getElementById("staff").addEventListener("change", loadAvailableTimes);
     </script>
 
     @section Scripts {

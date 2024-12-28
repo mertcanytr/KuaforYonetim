@@ -253,8 +253,28 @@
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
     },
     {
+      "Id": "C:\\Users\\mertc\\OneDrive\\Masaüstü\\main\\Ödevler\\KuaforYonetim1\\wwwroot\\photo\\Beard_Grooming.jpg",
+      "PackagePath": "staticwebassets\\photo\\Beard_Grooming.jpg"
+    },
+    {
+      "Id": "C:\\Users\\mertc\\OneDrive\\Masaüstü\\main\\Ödevler\\KuaforYonetim1\\wwwroot\\photo\\Hair_Beard.jpg",
+      "PackagePath": "staticwebassets\\photo\\Hair_Beard.jpg"
+    },
+    {
+      "Id": "C:\\Users\\mertc\\OneDrive\\Masaüstü\\main\\Ödevler\\KuaforYonetim1\\wwwroot\\photo\\Haircut.jpg",
+      "PackagePath": "staticwebassets\\photo\\Haircut.jpg"
+    },
+    {
+      "Id": "C:\\Users\\mertc\\OneDrive\\Masaüstü\\main\\Ödevler\\KuaforYonetim1\\wwwroot\\photo\\Shave.jpg",
+      "PackagePath": "staticwebassets\\photo\\Shave.jpg"
+    },
+    {
       "Id": "C:\\Users\\mertc\\OneDrive\\Masaüstü\\main\\Ödevler\\KuaforYonetim1\\wwwroot\\photo\\barberwallpaper.jpeg",
       "PackagePath": "staticwebassets\\photo\\barberwallpaper.jpeg"
+    },
+    {
+      "Id": "C:\\Users\\mertc\\OneDrive\\Masaüstü\\main\\Ödevler\\KuaforYonetim1\\wwwroot\\photo\\wallpaper.jpg",
+      "PackagePath": "staticwebassets\\photo\\wallpaper.jpg"
     },
     {
       "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.KuaforYonetim1.Microsoft.AspNetCore.StaticWebAssets.props",

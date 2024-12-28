@@ -31,81 +31,81 @@ namespace KuaforYonetim1.Controllers
             return View();
         }
 
-        // Çalışanların uygunluk saatlerini listeleme
-        public IActionResult StaffAvailabilityList(int staffId)
-        {
-            var availabilities = _dbContext.StaffAvailabilities
-                .Where(sa => sa.StaffId == staffId)
-                .Include(sa => sa.Staff)
-                .ToList();
+        //// Çalışanların uygunluk saatlerini listeleme
+        //public IActionResult StaffAvailabilityList(int staffId)
+        //{
+        //    var availabilities = _dbContext.StaffAvailabilities
+        //        .Where(sa => sa.StaffId == staffId)
+        //        .Include(sa => sa.Staff)
+        //        .ToList();
 
-            ViewBag.StaffId = staffId;
-            return View(availabilities);
-        }
+        //    ViewBag.StaffId = staffId;
+        //    return View(availabilities);
+        //}
 
-        // Uygunluk saati ekleme
-        [HttpGet]
-        public IActionResult AddStaffAvailability(int staffId)
-        {
-            var model = new StaffAvailability
-            {
-                StaffId = staffId
-            };
-            return View(model);
-        }
+        //// Uygunluk saati ekleme
+        //[HttpGet]
+        //public IActionResult AddStaffAvailability(int staffId)
+        //{
+        //    var model = new StaffAvailability
+        //    {
+        //        StaffId = staffId
+        //    };
+        //    return View(model);
+        //}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult AddStaffAvailability(StaffAvailability model)
-        {
-            if (ModelState.IsValid)
-            {
-                _dbContext.StaffAvailabilities.Add(model);
-                _dbContext.SaveChanges();
-                TempData["SuccessMessage"] = "Uygunluk saati başarıyla eklendi.";
-                return RedirectToAction("StaffAvailabilityList", new { staffId = model.StaffId });
-            }
-            return View(model);
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult AddStaffAvailability(StaffAvailability model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _dbContext.StaffAvailabilities.Add(model);
+        //        _dbContext.SaveChanges();
+        //        TempData["SuccessMessage"] = "Uygunluk saati başarıyla eklendi.";
+        //        return RedirectToAction("StaffAvailabilityList", new { staffId = model.StaffId });
+        //    }
+        //    return View(model);
+        //}
 
-        // Uygunluk saati düzenleme
-        [HttpGet]
-        public IActionResult EditStaffAvailability(int id)
-        {
-            var availability = _dbContext.StaffAvailabilities.Find(id);
-            if (availability == null)
-            {
-                return NotFound();
-            }
-            return View(availability);
-        }
+        //// Uygunluk saati düzenleme
+        //[HttpGet]
+        //public IActionResult EditStaffAvailability(int id)
+        //{
+        //    var availability = _dbContext.StaffAvailabilities.Find(id);
+        //    if (availability == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(availability);
+        //}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult EditStaffAvailability(StaffAvailability model)
-        {
-            if (ModelState.IsValid)
-            {
-                _dbContext.StaffAvailabilities.Update(model);
-                _dbContext.SaveChanges();
-                TempData["SuccessMessage"] = "Uygunluk saati başarıyla güncellendi.";
-                return RedirectToAction("StaffAvailabilityList", new { staffId = model.StaffId });
-            }
-            return View(model);
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult EditStaffAvailability(StaffAvailability model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _dbContext.StaffAvailabilities.Update(model);
+        //        _dbContext.SaveChanges();
+        //        TempData["SuccessMessage"] = "Uygunluk saati başarıyla güncellendi.";
+        //        return RedirectToAction("StaffAvailabilityList", new { staffId = model.StaffId });
+        //    }
+        //    return View(model);
+        //}
 
-        // Uygunluk saati silme
-        public IActionResult DeleteStaffAvailability(int id)
-        {
-            var availability = _dbContext.StaffAvailabilities.Find(id);
-            if (availability != null)
-            {
-                _dbContext.StaffAvailabilities.Remove(availability);
-                _dbContext.SaveChanges();
-                TempData["SuccessMessage"] = "Uygunluk saati başarıyla silindi.";
-            }
-            return RedirectToAction("StaffAvailabilityList", new { staffId = availability.StaffId });
-        }
+        //// Uygunluk saati silme
+        //public IActionResult DeleteStaffAvailability(int id)
+        //{
+        //    var availability = _dbContext.StaffAvailabilities.Find(id);
+        //    if (availability != null)
+        //    {
+        //        _dbContext.StaffAvailabilities.Remove(availability);
+        //        _dbContext.SaveChanges();
+        //        TempData["SuccessMessage"] = "Uygunluk saati başarıyla silindi.";
+        //    }
+        //    return RedirectToAction("StaffAvailabilityList", new { staffId = availability.StaffId });
+        //}
 
         // Logout action to clear session
         public IActionResult Logout()

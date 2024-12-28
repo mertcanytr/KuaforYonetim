@@ -76,3 +76,4 @@ C:\Users\mertc\OneDrive\Masaüstü\main\Ödevler\KuaforYonetim1\obj\Debug\net6.0
 C:\Users\mertc\OneDrive\Masaüstü\main\Ödevler\KuaforYonetim1\obj\Debug\net6.0\KuaforYonetim1.pdb
 C:\Users\mertc\OneDrive\Masaüstü\main\Ödevler\KuaforYonetim1\obj\Debug\net6.0\KuaforYonetim1.genruntimeconfig.cache
 C:\Users\mertc\OneDrive\Masaüstü\main\Ödevler\KuaforYonetim1\obj\Debug\net6.0\ref\KuaforYonetim1.dll
+C:\Users\mertc\OneDrive\Masaüstü\main\Ödevler\KuaforYonetim1\bin\Debug\net6.0\RestSharp.dll

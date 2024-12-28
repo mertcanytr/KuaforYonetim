@@ -24,17 +24,20 @@ namespace KuaforYonetim1.Controllers
         {
             var services = _dbContext.Services.ToList();
             ViewData["Services"] = services;
+            var staffs = _dbContext.Staffs.ToList(); // Tüm personeli al
+            ViewData["Staffs"] = staffs;
+            ViewBag.staffs = staffs;
             return View("AppointmentBooking");
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetStaff(int serviceId)
+        public async Task<IActionResult> GetServices()
         {
-            var staffList = await _dbContext.StaffServices
-                .Where(ss => ss.ServiceId == serviceId)
-                .Select(ss => ss.Staff)
-                .ToListAsync();
-
+            var services = await _dbContext.Services.ToListAsync();
+            return Json(services);
+        }
+        public async Task<IActionResult> GetAllStaff()
+        {
+            var staffList = await _dbContext.Staffs.ToListAsync(); 
             return Json(staffList);
         }
 
@@ -88,7 +91,7 @@ namespace KuaforYonetim1.Controllers
         {
             if (ModelState.IsValid)
             {
-                appointment.Status = AppointmentStatus.Pending;
+                appointment.Status = AppointmentStatus.Pending; // Randevu durumu beklemede olarak ayarlanır
                 _dbContext.Appointments.Add(appointment);
                 await _dbContext.SaveChangesAsync();
                 TempData["message"] = "Your appointment has been booked and is pending approval.";
@@ -97,6 +100,30 @@ namespace KuaforYonetim1.Controllers
 
             ViewData["Services"] = _dbContext.Services.ToList();
             return View("AppointmentBooking", appointment);
+        }
+
+        public IActionResult AdminPanel()
+        {
+            var pendingAppointments = _dbContext.Appointments
+                .Where(a => a.Status == AppointmentStatus.Pending)
+                .Include(a => a.Customer)
+                .Include(a => a.Service)
+                .ToList();
+
+            return View(pendingAppointments);
+        }
+
+        [HttpPost]
+        public IActionResult ApproveAppointment(int appointmentId)
+        {
+            var appointment = _dbContext.Appointments.Find(appointmentId);
+            if (appointment != null)
+            {
+                appointment.Status = AppointmentStatus.Confirmed; // Onaylandı olarak ayarlanır
+                _dbContext.SaveChanges();
+            }
+
+            return RedirectToAction("AdminPanel");
         }
 
 

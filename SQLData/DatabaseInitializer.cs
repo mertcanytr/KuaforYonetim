@@ -120,8 +120,8 @@ namespace KuaforYonetim1.Data
                 {
                     new Service { ServiceName = "Haircut", Duration = 30, Price = 20, SalonId = 1 },
                     new Service { ServiceName = "Shave", Duration = 20, Price = 15, SalonId = 1 },
-                    new Service { ServiceName = "Beard Grooming", Duration = 25, Price = 18, SalonId = 1 },
-                    new Service { ServiceName = "Hair + Beard", Duration = 50, Price = 35, SalonId = 1 }
+                    new Service { ServiceName = "Beard_Grooming", Duration = 25, Price = 18, SalonId = 1 },
+                    new Service { ServiceName = "Hair_Beard", Duration = 50, Price = 35, SalonId = 1 }
                 };
 
                 context.Services.AddRange(services);
